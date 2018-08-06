@@ -1,5 +1,27 @@
 #!/bin/bash
 
+PACKAGES=(
+	github.com/golang/dep/cmd/dep
+	github.com/ramya-rao-a/go-outline
+	github.com/acroca/go-symbols
+	github.com/mdempsky/gocode
+	github.com/rogpeppe/godef
+	golang.org/x/tools/cmd/godoc
+	github.com/zmb3/gogetdoc
+	github.com/golang/lint/golint
+	github.com/fatih/gomodifytags
+	golang.org/x/tools/cmd/gorename
+	sourcegraph.com/sqs/goreturns
+	golang.org/x/tools/cmd/goimports
+	github.com/cweill/gotests/...
+	golang.org/x/tools/cmd/guru
+	github.com/josharian/impl
+	github.com/haya14busa/goplay/cmd/goplay
+	github.com/uudashr/gopkgs/cmd/gopkgs
+	github.com/davidrjenni/reftools/cmd/fillstruct
+	github.com/alecthomas/gometalinter
+)
+
 GO=$(command -v go)
 
 if ! [ -x "$GO" ]; then
@@ -35,26 +57,13 @@ export GOBIN="\${GOPATH}/bin"
 PATH="\$PATH:\$GOBIN"
 EOF
 
-$GO get -u -v github.com/golang/dep/cmd/dep
-$GO get -u -v github.com/ramya-rao-a/go-outline
-$GO get -u -v github.com/acroca/go-symbols
-$GO get -u -v github.com/mdempsky/gocode
-$GO get -u -v github.com/rogpeppe/godef
-$GO get -u -v golang.org/x/tools/cmd/godoc
-$GO get -u -v github.com/zmb3/gogetdoc
-$GO get -u -v github.com/golang/lint/golint
-$GO get -u -v github.com/fatih/gomodifytags
-$GO get -u -v golang.org/x/tools/cmd/gorename
-$GO get -u -v sourcegraph.com/sqs/goreturns
-$GO get -u -v golang.org/x/tools/cmd/goimports
-$GO get -u -v github.com/cweill/gotests/...
-$GO get -u -v golang.org/x/tools/cmd/guru
-$GO get -u -v github.com/josharian/impl
-$GO get -u -v github.com/haya14busa/goplay/cmd/goplay
-$GO get -u -v github.com/uudashr/gopkgs/cmd/gopkgs
-$GO get -u -v github.com/davidrjenni/reftools/cmd/fillstruct
-$GO get -u -v github.com/alecthomas/gometalinter
-"${GOBIN}/gometalinter" --install
+for i in "${PACKAGES[@]}"; do
+	$GO get -u -v "$i"
+done
+
+if [ -f "${GOBIN}/gometalinter" ]; then
+	"${GOBIN}/gometalinter" --install
+fi
 
 unset GOBIN
 unset GOPATH
