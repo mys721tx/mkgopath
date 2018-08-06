@@ -1,0 +1,41 @@
+#!/bin/bash
+
+if ! [ -x "$(command -v go)" ]; then
+	echo 'Error: go is not installed.' >&2
+	exit 1
+fi
+
+GOPATH=$(pwd)/${1}
+GOBIN=${GOPATH}/bin
+
+mkdir "$GOPATH"
+
+cat << EOF > "$GOPATH"/env.sh
+#!/bin/bash
+
+export GOPATH="${GOPATH}"
+
+export GOBIN="\${GOPATH}/bin"
+
+PATH="\$PATH:\$GOBIN"
+EOF
+
+$(command -v go) get -u -v github.com/ramya-rao-a/go-outline
+$(command -v go) get -u -v github.com/acroca/go-symbols
+$(command -v go) get -u -v github.com/mdempsky/gocode
+$(command -v go) get -u -v github.com/rogpeppe/godef
+$(command -v go) get -u -v golang.org/x/tools/cmd/godoc
+$(command -v go) get -u -v github.com/zmb3/gogetdoc
+$(command -v go) get -u -v github.com/golang/lint/golint
+$(command -v go) get -u -v github.com/fatih/gomodifytags
+$(command -v go) get -u -v golang.org/x/tools/cmd/gorename
+$(command -v go) get -u -v sourcegraph.com/sqs/goreturns
+$(command -v go) get -u -v golang.org/x/tools/cmd/goimports
+$(command -v go) get -u -v github.com/cweill/gotests/...
+$(command -v go) get -u -v golang.org/x/tools/cmd/guru
+$(command -v go) get -u -v github.com/josharian/impl
+$(command -v go) get -u -v github.com/haya14busa/goplay/cmd/goplay
+$(command -v go) get -u -v github.com/uudashr/gopkgs/cmd/gopkgs
+$(command -v go) get -u -v github.com/davidrjenni/reftools/cmd/fillstruct
+$(command -v go) get -u -v github.com/alecthomas/gometalinter
+"${GOBIN}/gometalinter" --install
