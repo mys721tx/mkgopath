@@ -18,7 +18,12 @@ fi
 GOPATH=$(pwd)/${1}
 GOBIN=${GOPATH}/bin
 
-mkdir "$GOPATH"
+export GOPATH
+export GOBIN
+
+if [ ! -d "$GOPATH" ]; then
+  mkdir "$GOPATH"
+fi
 
 cat << EOF > "$GOPATH"/env.sh
 #!/bin/bash
@@ -50,3 +55,6 @@ $GO get -u -v github.com/uudashr/gopkgs/cmd/gopkgs
 $GO get -u -v github.com/davidrjenni/reftools/cmd/fillstruct
 $GO get -u -v github.com/alecthomas/gometalinter
 "${GOBIN}/gometalinter" --install
+
+unset GOBIN
+unset GOPATH
